@@ -12,6 +12,7 @@ import com.wangyu.world.admin.modules.ums.entity.UmsAdminLoginLog;
 import com.wangyu.world.admin.modules.ums.entity.UmsRole;
 import com.wangyu.world.admin.modules.ums.repository.UmsAdminLoginLogRepository;
 import com.wangyu.world.admin.modules.ums.repository.UmsAdminRepository;
+import com.wangyu.world.admin.modules.ums.repository.UmsRoleRepository;
 import com.wangyu.world.admin.modules.ums.service.UmsAdminCacheService;
 import com.wangyu.world.admin.modules.ums.service.UmsAdminService;
 import com.wangyu.world.common.api.CommonResult;
@@ -44,6 +45,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     private UmsAdminRepository adminCrudRepository;
     @Resource
     private UmsAdminLoginLogRepository umsAdminLoginLogRepository;
+    @Resource
+    private UmsRoleRepository umsRoleRepository;
     @Resource
     private AuthService authService;
     @Resource
@@ -155,7 +158,6 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Override
     public List<UmsRole> getRoleList(Long id) {
-
-        return null;
+        return umsRoleRepository.listUmsRoleByUmsAdminId(id);
     }
 }

@@ -1,9 +1,11 @@
 package com.wangyu.world.admin.modules.ums.service.impl;
 
 import com.wangyu.world.admin.modules.ums.entity.UmsMenu;
+import com.wangyu.world.admin.modules.ums.repository.UmsMenuRepository;
 import com.wangyu.world.admin.modules.ums.service.UmsRoleService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -14,8 +16,12 @@ import java.util.List;
  */
 @Service
 public class UmsRoleServiceImpl implements UmsRoleService {
+
+    @Resource
+    private UmsMenuRepository umsMenuRepository;
+
     @Override
     public List<UmsMenu> getMenuList(Long id) {
-        return null;
+        return umsMenuRepository.listByUmsAdminId(id);
     }
 }

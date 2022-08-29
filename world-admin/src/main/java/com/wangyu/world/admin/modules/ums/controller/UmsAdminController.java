@@ -78,4 +78,11 @@ public class UmsAdminController {
         }
         return CommonResult.success(data);
     }
+
+    @ApiOperation("登出功能")
+    @PostMapping("/logout")
+    @ResponseBody
+    public CommonResult logout() {
+        return CommonResult.success(null);
+    }
 }
