@@ -1,9 +1,7 @@
 package com.wangyu.world.admin.modules.base.entity;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,7 +13,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseEntity implements Serializable {

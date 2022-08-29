@@ -14,6 +14,7 @@
         <module>world-mbg</module>
         <module>world-jpa</module>
         <module>world-gateway</module>
+        <module>world-auth</module>
     </modules>
 
     <parent>
@@ -51,6 +52,7 @@
         <nimbus-jose-jwt.version>9.23</nimbus-jose-jwt.version>
         <world-common.version>1.0-SNAPSHOT</world-common.version>
         <world-mbg.version>1.0-SNAPSHOT</world-mbg.version>
+        <world-jpa.version>1.0-SNAPSHOT</world-jpa.version>
     </properties>
 
     <dependencies>
@@ -100,17 +102,23 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!--mall通用模块-->
+            <!--world通用模块-->
             <dependency>
                 <groupId>com.wangyu.world</groupId>
                 <artifactId>world-common</artifactId>
                 <version>${world-common.version}</version>
             </dependency>
-            <!--mall中MBG生成模块-->
+            <!--world中MBG生成模块-->
             <dependency>
                 <groupId>com.wangyu.world</groupId>
                 <artifactId>world-mbg</artifactId>
                 <version>${world-mbg.version}</version>
+            </dependency>
+            <!--world中MBG生成模块-->
+            <dependency>
+                <groupId>com.wangyu.world</groupId>
+                <artifactId>world-jpa</artifactId>
+                <version>${world-jpa.version}</version>
             </dependency>
             <!--MyBatis分页插件starter-->
             <dependency>

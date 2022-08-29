@@ -35,8 +35,10 @@ import java.util.stream.Collectors;
  */
 @Component
 public class AuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
     @Autowired
     private IgnoreUrlsConfig ignoreUrlsConfig;
 
@@ -92,13 +94,14 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
         }
         authorities = authorities.stream().map(i -> i = AuthConstant.AUTHORITY_PREFIX + i).collect(Collectors.toList());
         //认证通过且角色匹配的用户可访问当前路径
-        return mono
+        Mono<AuthorizationDecision> authorizationDecisionMono = mono
                 .filter(Authentication::isAuthenticated)
                 .flatMapIterable(Authentication::getAuthorities)
                 .map(GrantedAuthority::getAuthority)
                 .any(authorities::contains)
                 .map(AuthorizationDecision::new)
                 .defaultIfEmpty(new AuthorizationDecision(false));
+        return authorizationDecisionMono;
     }
 
 }
