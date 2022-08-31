@@ -6,6 +6,7 @@ import com.wangyu.world.admin.modules.ums.entity.UmsAdmin;
 import com.wangyu.world.admin.modules.ums.entity.UmsRole;
 import com.wangyu.world.admin.modules.ums.service.UmsAdminService;
 import com.wangyu.world.admin.modules.ums.service.UmsRoleService;
+import com.wangyu.world.common.api.CommonPage;
 import com.wangyu.world.common.api.CommonResult;
 import com.wangyu.world.common.domain.UserDto;
 import io.swagger.annotations.Api;
@@ -42,7 +43,7 @@ public class UmsAdminController {
     public CommonResult<UmsAdmin> register(@Validated @RequestBody UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = umsAdminService.register(umsAdminParam);
         if (umsAdmin == null) {
-            return CommonResult.failed();
+            return CommonResult.failed("用户名已存在");
         }
         return CommonResult.success(umsAdmin);
     }
@@ -84,5 +85,70 @@ public class UmsAdminController {
     @ResponseBody
     public CommonResult logout() {
         return CommonResult.success(null);
+    }
+
+    @ApiOperation("根据用户名或姓名分页获取用户列表")
+    @GetMapping("/list")
+    @ResponseBody
+    public CommonResult<CommonPage<UmsAdmin>> list(@RequestParam(value = "keyword", required = false) String keyword,
+                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                   @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        List<UmsAdmin> adminList = umsAdminService.list(keyword, pageSize, pageNum);
+        return CommonResult.success(CommonPage.restPage(adminList));
+    }
+
+    @ApiOperation("删除指定用户信息")
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    public CommonResult delete(@PathVariable Long id) {
+        int count = umsAdminService.delete(id);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
+    @ApiOperation("修改帐号状态")
+    @PostMapping("/updateStatus/{id}")
+    @ResponseBody
+    public CommonResult updateStatus(@PathVariable Long id,@RequestParam(value = "status") Integer status) {
+        UmsAdmin umsAdmin = new UmsAdmin();
+        umsAdmin.setStatus(status);
+        int count = umsAdminService.update(id,umsAdmin);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
+    @ApiOperation("修改指定用户信息")
+    @PostMapping("/update/{id}")
+    @ResponseBody
+    public CommonResult update(@PathVariable Long id, @RequestBody UmsAdmin admin) {
+        int count = umsAdminService.update(id, admin);
+        if (count == 1) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
+    @ApiOperation("获取指定用户的角色")
+    @GetMapping("/role/{adminId}")
+    @ResponseBody
+    public CommonResult<List<UmsRole>> getRoleList(@PathVariable Long adminId) {
+        List<UmsRole> roleList = umsAdminService.getRoleList(adminId);
+        return CommonResult.success(roleList);
+    }
+
+    @ApiOperation("给用户分配角色")
+    @PostMapping("/role/update")
+    @ResponseBody
+    public CommonResult updateRole(@RequestParam("adminId") Long adminId,
+                                   @RequestParam("roleIds") List<Long> roleIds) {
+        int count = umsAdminService.updateRole(adminId, roleIds);
+        if (count >= 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
     }
 }

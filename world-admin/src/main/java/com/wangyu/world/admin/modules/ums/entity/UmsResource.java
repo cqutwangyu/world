@@ -1,7 +1,6 @@
 package com.wangyu.world.admin.modules.ums.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.wangyu.world.admin.modules.base.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -21,7 +20,6 @@ import java.util.Set;
 @Setter
 @Getter
 @Builder
-@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class UmsResource extends BaseEntity {
@@ -30,7 +28,7 @@ public class UmsResource extends BaseEntity {
     @JoinTable(name = "ums_roles_resources",
             joinColumns = @JoinColumn(name = "resource_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @JsonIgnoreProperties
+    @JsonIgnore
     private Set<UmsRole> umsRoles = new HashSet<>();
 
     @ApiModelProperty(value = "资源名称")

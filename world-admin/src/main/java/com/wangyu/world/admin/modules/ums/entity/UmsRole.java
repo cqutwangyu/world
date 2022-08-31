@@ -1,6 +1,8 @@
 package com.wangyu.world.admin.modules.ums.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.wangyu.world.admin.modules.base.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -17,12 +19,11 @@ import java.util.Set;
 @Setter
 @Getter
 @Builder
-@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class UmsRole extends BaseEntity implements Serializable {
 
-    @ManyToMany(mappedBy="umsRoles")
+    @ManyToMany(mappedBy = "umsRoles")
     @JsonIgnore
     private Set<UmsAdmin> umsAdmins = new HashSet<>();
 
@@ -33,7 +34,7 @@ public class UmsRole extends BaseEntity implements Serializable {
     @JsonIgnore
     private Set<UmsMenu> umsMenus = new HashSet<>();
 
-    @ManyToMany(mappedBy="umsRoles")
+    @ManyToMany(mappedBy = "umsRoles")
     @JsonIgnore
     private Set<UmsResource> umsResources = new HashSet<>();
 

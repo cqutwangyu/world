@@ -5,6 +5,7 @@ import com.wangyu.world.admin.modules.ums.entity.UmsAdmin;
 import com.wangyu.world.admin.modules.ums.entity.UmsRole;
 import com.wangyu.world.common.api.CommonResult;
 import com.wangyu.world.common.domain.UserDto;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 
@@ -28,4 +29,12 @@ public interface UmsAdminService {
     UmsAdminCacheService getCacheService();
 
     List<UmsRole> getRoleList(Long id);
+
+    List<UmsAdmin> list(String keyword, Integer pageSize, Integer pageNum);
+
+    Integer update(Long id, UmsAdmin admin);
+
+    Integer updateRole(Long adminId, List<Long> roleIds);
+
+    Integer delete(Long id);
 }

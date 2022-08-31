@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Created by macro on 2020/2/27.
  */
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler {//todo 没生效
 
     @ResponseBody
     @ExceptionHandler(value = ApiException.class)

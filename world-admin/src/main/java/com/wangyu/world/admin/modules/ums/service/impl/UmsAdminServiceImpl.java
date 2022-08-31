@@ -23,6 +23,7 @@ import com.wangyu.world.common.exception.Asserts;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -42,7 +43,7 @@ import java.util.stream.Collectors;
 public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Resource
-    private UmsAdminRepository adminCrudRepository;
+    private UmsAdminRepository umsAdminRepository;
     @Resource
     private UmsAdminLoginLogRepository umsAdminLoginLogRepository;
     @Resource
@@ -56,17 +57,14 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     public UmsAdmin register(UmsAdminParam umsAdminParam) {
         UmsAdmin umsAdmin = new UmsAdmin();
         BeanUtils.copyProperties(umsAdminParam, umsAdmin);
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.startsWith());
-        Example<UmsAdmin> example = Example.of(umsAdmin, matcher);
-        long count = adminCrudRepository.count(example);
-        if (count != 0) {
+        boolean exist = umsAdminRepository.existsByUsername(umsAdmin.getUsername());
+        if (exist) {
             return null;
         }
         //加密
         String encodePassword = BCrypt.hashpw(umsAdmin.getPassword());
         umsAdmin.setPassword(encodePassword);
-        adminCrudRepository.save(umsAdmin);
+        umsAdminRepository.save(umsAdmin);
         return umsAdmin;
     }
 
@@ -75,7 +73,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.startsWith());
         Example<UmsAdmin> example = Example.of(UmsAdmin.builder().username(username).build(), matcher);
-        Optional<UmsAdmin> adminEntity = adminCrudRepository.findOne(example);
+        Optional<UmsAdmin> adminEntity = umsAdminRepository.findOne(example);
         if (adminEntity.isPresent()) {
             return adminEntity.get();
         }
@@ -96,6 +94,9 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         CommonResult restResult = authService.getAccessToken(params);
         if (ResultCode.SUCCESS.getCode() == restResult.getCode() && restResult.getData() != null) {
             insertLoginLog(username);
+            UmsAdmin userAdmin = umsAdminRepository.findByUsername(username);
+            userAdmin.setLoginTime(new Date());
+            umsAdminRepository.save(userAdmin);
         }
         return restResult;
     }
@@ -128,7 +129,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         if (admin != null) {
             return admin;
         } else {
-            admin = adminCrudRepository.findById(userDto.getId()).get();
+            admin = umsAdminRepository.findById(userDto.getId()).get();
             getCacheService().setAdmin(admin);
             return admin;
         }
@@ -159,5 +160,52 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Override
     public List<UmsRole> getRoleList(Long id) {
         return umsRoleRepository.listUmsRoleByUmsAdminId(id);
+    }
+
+    @Override
+    public List<UmsAdmin> list(String keyword, Integer pageSize, Integer pageNum) {
+        ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("username", m -> m.caseSensitive().contains());
+        Example<UmsAdmin> example = Example.of(UmsAdmin.builder().username(keyword).build(), matcher);
+        return umsAdminRepository.findAll(example, Pageable.ofSize(pageSize).withPage(pageNum - 1)).getContent();
+    }
+
+    @Override
+    public Integer update(Long id, UmsAdmin admin) {
+        UmsAdmin umsAdmin = umsAdminRepository.findById(id).get();
+        if (admin.getEmail() != null) {
+            umsAdmin.setEmail(admin.getEmail());
+        }
+        if (admin.getNickName() != null) {
+            umsAdmin.setNickName(admin.getNickName());
+        }
+        if (admin.getNote() != null) {
+            umsAdmin.setNote(admin.getNote());
+        }
+        if (admin.getStatus() != null) {
+            umsAdmin.setStatus(admin.getStatus());
+        }
+        if (admin.getPassword() != null && !admin.getPassword().equals(umsAdmin.getPassword())) {
+            umsAdmin.setPassword(BCrypt.hashpw(umsAdmin.getPassword()));
+        }
+        umsAdminRepository.save(umsAdmin);
+        return 1;
+    }
+
+    @Override
+    public Integer updateRole(Long adminId, List<Long> roleIds) {
+        UmsAdmin umsAdmin = umsAdminRepository.findById(adminId).get();
+        if (umsAdmin == null) {
+            return 0;
+        }
+        List<UmsRole> roles = umsRoleRepository.findAllById(roleIds);
+        umsAdmin.setUmsRoles(roles);
+        umsAdminRepository.save(umsAdmin);
+        return 1;
+    }
+
+    @Override
+    public Integer delete(Long id) {
+        umsAdminRepository.deleteById(id);
+        return 1;
     }
 }

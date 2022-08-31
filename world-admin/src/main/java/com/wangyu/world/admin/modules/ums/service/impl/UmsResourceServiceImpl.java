@@ -63,10 +63,11 @@ public class UmsResourceServiceImpl implements UmsResourceService {
     @Override
     public List<UmsResource> list(Long categoryId, String nameKeyword, String urlKeyword, Integer pageSize, Integer pageNum) {
         Pageable pageable = Pageable.ofSize(2).withPage(1);
-        ExampleMatcher matcher = ExampleMatcher.matching();
-        matcher.withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains());
-        matcher.withMatcher("url", ExampleMatcher.GenericPropertyMatchers.contains());
-        Example<UmsResource> example = Example.of(UmsResource.builder().categoryId(categoryId).build(), matcher);
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withMatcher("name", m -> m.contains())
+                .withMatcher("url", m -> m.contains());
+        Example<UmsResource> example = Example.of(UmsResource.builder()
+                .categoryId(categoryId).name(nameKeyword).url(urlKeyword).build(), matcher);
         return umsResourceRepository.findAll(example, pageable).toList();
     }
 

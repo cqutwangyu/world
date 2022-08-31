@@ -15,7 +15,6 @@ import java.util.Date;
 @Setter
 @Getter
 @Builder
-@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class UmsAdminLoginLog extends BaseEntity implements Serializable {

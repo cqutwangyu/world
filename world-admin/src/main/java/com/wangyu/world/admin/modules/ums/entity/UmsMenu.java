@@ -18,12 +18,11 @@ import java.util.Set;
 @Setter
 @Getter
 @Builder
-@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class UmsMenu extends BaseEntity implements Serializable {
 
-    @ManyToMany(mappedBy="umsMenus")
+    @ManyToMany(mappedBy = "umsMenus")
     @JsonIgnore
     private Set<UmsRole> umsRoles = new HashSet<>();
 

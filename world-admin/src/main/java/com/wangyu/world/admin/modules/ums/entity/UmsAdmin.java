@@ -9,13 +9,13 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ums_user_admin")
 @Setter
 @Getter
 @Builder
-@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class UmsAdmin extends BaseEntity implements Serializable {
@@ -54,4 +54,16 @@ public class UmsAdmin extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UmsAdmin umsAdmin = (UmsAdmin) o;
+        return Objects.equals(username, umsAdmin.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
+    }
 }

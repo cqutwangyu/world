@@ -1,7 +1,9 @@
 package com.wangyu.world.admin.modules.ums.service.impl;
 
 import com.wangyu.world.admin.modules.ums.entity.UmsMenu;
+import com.wangyu.world.admin.modules.ums.entity.UmsRole;
 import com.wangyu.world.admin.modules.ums.repository.UmsMenuRepository;
+import com.wangyu.world.admin.modules.ums.repository.UmsRoleRepository;
 import com.wangyu.world.admin.modules.ums.service.UmsRoleService;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +22,21 @@ public class UmsRoleServiceImpl implements UmsRoleService {
     @Resource
     private UmsMenuRepository umsMenuRepository;
 
+    @Resource
+    private UmsRoleRepository umsRoleRepository;
+
     @Override
     public List<UmsMenu> getMenuList(Long id) {
         return umsMenuRepository.listByUmsAdminId(id);
+    }
+
+    @Override
+    public List<UmsRole> list() {
+        return umsRoleRepository.findAll();
+    }
+
+    @Override
+    public Integer update(Long id, UmsRole role) {
+        return null;
     }
 }

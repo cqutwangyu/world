@@ -1,6 +1,8 @@
 package com.wangyu.world.admin.modules.ums.service;
 
 import com.wangyu.world.admin.modules.ums.entity.UmsMenu;
+import com.wangyu.world.admin.modules.ums.entity.UmsRole;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 
@@ -12,4 +14,8 @@ import java.util.List;
  */
 public interface UmsRoleService {
     List<UmsMenu> getMenuList(Long id);
+
+    List<UmsRole> list();
+
+    Integer update(Long id, UmsRole role);
 }
