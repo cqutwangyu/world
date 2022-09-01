@@ -1,6 +1,7 @@
 package com.wangyu.world.common.exception;
 
 import com.wangyu.world.common.api.CommonResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -9,12 +10,20 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.PostConstruct;
+
 /**
  * 全局异常处理
  * Created by macro on 2020/2/27.
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {//todo 没生效
+
+    @PostConstruct
+    public void initInfo() {
+        log.info("GlobalExceptionHandler init");
+    }
 
     @ResponseBody
     @ExceptionHandler(value = ApiException.class)
@@ -33,7 +42,7 @@ public class GlobalExceptionHandler {//todo 没生效
         if (bindingResult.hasErrors()) {
             FieldError fieldError = bindingResult.getFieldError();
             if (fieldError != null) {
-                message = fieldError.getField()+fieldError.getDefaultMessage();
+                message = fieldError.getField() + fieldError.getDefaultMessage();
             }
         }
         return CommonResult.validateFailed(message);
@@ -47,7 +56,7 @@ public class GlobalExceptionHandler {//todo 没生效
         if (bindingResult.hasErrors()) {
             FieldError fieldError = bindingResult.getFieldError();
             if (fieldError != null) {
-                message = fieldError.getField()+fieldError.getDefaultMessage();
+                message = fieldError.getField() + fieldError.getDefaultMessage();
             }
         }
         return CommonResult.validateFailed(message);
