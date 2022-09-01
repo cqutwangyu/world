@@ -18,11 +18,23 @@ import javax.annotation.PostConstruct;
  */
 @ControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler {//todo 没生效
+public class GlobalExceptionHandler {
 
     @PostConstruct
     public void initInfo() {
         log.info("GlobalExceptionHandler init");
+    }
+
+    @ResponseBody
+    @ExceptionHandler(value = RuntimeException.class)
+    public CommonResult handle(RuntimeException e) {
+        if (e instanceof ApiException) {
+            return handle((ApiException) e);
+        }
+        if (e.getMessage() != null) {
+            return CommonResult.failed(e.getMessage());
+        }
+        return CommonResult.failed(e.getMessage());
     }
 
     @ResponseBody
