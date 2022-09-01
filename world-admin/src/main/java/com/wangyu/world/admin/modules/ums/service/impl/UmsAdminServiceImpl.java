@@ -15,6 +15,7 @@ import com.wangyu.world.admin.modules.ums.repository.UmsAdminRepository;
 import com.wangyu.world.admin.modules.ums.repository.UmsRoleRepository;
 import com.wangyu.world.admin.modules.ums.service.UmsAdminCacheService;
 import com.wangyu.world.admin.modules.ums.service.UmsAdminService;
+import com.wangyu.world.admin.utils.JpaUtil;
 import com.wangyu.world.common.api.CommonResult;
 import com.wangyu.world.common.api.ResultCode;
 import com.wangyu.world.common.constant.AuthConstant;
@@ -172,21 +173,10 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Override
     public Integer update(Long id, UmsAdmin admin) {
         UmsAdmin umsAdmin = umsAdminRepository.findById(id).get();
-        if (admin.getEmail() != null) {
-            umsAdmin.setEmail(admin.getEmail());
-        }
-        if (admin.getNickName() != null) {
-            umsAdmin.setNickName(admin.getNickName());
-        }
-        if (admin.getNote() != null) {
-            umsAdmin.setNote(admin.getNote());
-        }
-        if (admin.getStatus() != null) {
-            umsAdmin.setStatus(admin.getStatus());
-        }
         if (admin.getPassword() != null && !admin.getPassword().equals(umsAdmin.getPassword())) {
-            umsAdmin.setPassword(BCrypt.hashpw(umsAdmin.getPassword()));
+            admin.setPassword(BCrypt.hashpw(admin.getPassword()));
         }
+        JpaUtil.copyNotNullProperties(admin,umsAdmin);
         umsAdminRepository.save(umsAdmin);
         return 1;
     }
