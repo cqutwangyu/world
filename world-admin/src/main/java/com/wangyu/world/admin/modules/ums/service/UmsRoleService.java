@@ -20,4 +20,6 @@ public interface UmsRoleService {
     Integer update(Long id, UmsRole role);
 
     List<UmsRole> list(String keyword, Integer pageSize, Integer pageNum);
+
+    Integer create(UmsRole role);
 }

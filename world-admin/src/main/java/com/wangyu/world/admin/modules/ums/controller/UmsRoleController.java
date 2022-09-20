@@ -34,6 +34,17 @@ public class UmsRoleController {
     @Resource
     private UmsRoleService umsRoleService;
 
+    @ApiOperation("添加角色")
+    @PostMapping("/create")
+    @ResponseBody
+    public CommonResult create(@RequestBody UmsRole role) {
+        int count = umsRoleService.create(role);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
     @ApiOperation("获取所有角色")
     @GetMapping("/listAll")
     @ResponseBody

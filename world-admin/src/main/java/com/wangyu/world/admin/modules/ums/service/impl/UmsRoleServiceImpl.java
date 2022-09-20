@@ -50,4 +50,12 @@ public class UmsRoleServiceImpl implements UmsRoleService {
         Example<UmsRole> example = Example.of(UmsRole.builder().name(keyword).build(), matcher);
         return umsRoleRepository.findAll(example, Pageable.ofSize(pageSize).withPage(pageNum - 1)).getContent();
     }
+
+    @Override
+    public Integer create(UmsRole role) {
+        role.setAdminCount(0);
+        role.setSort(0);
+        umsRoleRepository.save(role);
+        return 1;
+    }
 }
