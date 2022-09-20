@@ -42,6 +42,16 @@ public class UmsRoleController {
         return CommonResult.success(roleList);
     }
 
+    @ApiOperation("根据角色名称分页获取角色列表")
+    @GetMapping("/list")
+    @ResponseBody
+    public CommonResult<CommonPage<UmsRole>> list(@RequestParam(value = "keyword", required = false) String keyword,
+                                                  @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                  @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        List<UmsRole> roleList = umsRoleService.list(keyword, pageSize, pageNum);
+        return CommonResult.success(CommonPage.restPage(roleList));
+    }
+
     @ApiOperation("修改角色")
     @PostMapping( "/update/{id}")
     @ResponseBody

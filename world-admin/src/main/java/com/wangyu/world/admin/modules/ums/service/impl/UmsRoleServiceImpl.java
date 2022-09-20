@@ -1,10 +1,14 @@
 package com.wangyu.world.admin.modules.ums.service.impl;
 
+import com.wangyu.world.admin.modules.ums.entity.UmsAdmin;
 import com.wangyu.world.admin.modules.ums.entity.UmsMenu;
 import com.wangyu.world.admin.modules.ums.entity.UmsRole;
 import com.wangyu.world.admin.modules.ums.repository.UmsMenuRepository;
 import com.wangyu.world.admin.modules.ums.repository.UmsRoleRepository;
 import com.wangyu.world.admin.modules.ums.service.UmsRoleService;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -38,5 +42,12 @@ public class UmsRoleServiceImpl implements UmsRoleService {
     @Override
     public Integer update(Long id, UmsRole role) {
         return null;
+    }
+
+    @Override
+    public List<UmsRole> list(String keyword, Integer pageSize, Integer pageNum) {
+        ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("name", m -> m.caseSensitive().contains());
+        Example<UmsRole> example = Example.of(UmsRole.builder().name(keyword).build(), matcher);
+        return umsRoleRepository.findAll(example, Pageable.ofSize(pageSize).withPage(pageNum - 1)).getContent();
     }
 }
