@@ -22,4 +22,6 @@ public interface UmsRoleService {
     List<UmsRole> list(String keyword, Integer pageSize, Integer pageNum);
 
     Integer create(UmsRole role);
+
+    Integer delete(List<Long> ids);
 }

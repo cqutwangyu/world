@@ -58,4 +58,10 @@ public class UmsRoleServiceImpl implements UmsRoleService {
         umsRoleRepository.save(role);
         return 1;
     }
+
+    @Override
+    public Integer delete(List<Long> ids) {
+        umsRoleRepository.deleteAllById(ids);
+        return 1;
+    }
 }

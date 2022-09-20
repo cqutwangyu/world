@@ -45,6 +45,17 @@ public class UmsRoleController {
         return CommonResult.failed();
     }
 
+    @ApiOperation("批量删除角色")
+    @PostMapping("/delete")
+    @ResponseBody
+    public CommonResult delete(@RequestParam("ids") List<Long> ids) {
+        int count = umsRoleService.delete(ids);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
     @ApiOperation("获取所有角色")
     @GetMapping("/listAll")
     @ResponseBody
