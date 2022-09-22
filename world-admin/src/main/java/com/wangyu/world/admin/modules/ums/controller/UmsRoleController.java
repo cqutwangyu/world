@@ -1,24 +1,15 @@
 package com.wangyu.world.admin.modules.ums.controller;
 
-import cn.hutool.core.collection.CollUtil;
-import com.wangyu.world.admin.modules.ums.dto.UmsAdminParam;
-import com.wangyu.world.admin.modules.ums.entity.UmsAdmin;
 import com.wangyu.world.admin.modules.ums.entity.UmsRole;
-import com.wangyu.world.admin.modules.ums.service.UmsAdminService;
 import com.wangyu.world.admin.modules.ums.service.UmsRoleService;
 import com.wangyu.world.common.api.CommonPage;
 import com.wangyu.world.common.api.CommonResult;
-import com.wangyu.world.common.domain.UserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 角色管理控制器
